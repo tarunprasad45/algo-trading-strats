@@ -30,10 +30,11 @@ def generate_signals(data, short_window=20, long_window=50):
     df.loc[df["short_ma"] > df["long_ma"], "signal"] = 1
 
     # Shift 1 to avoid lookahead
-    df["position"] = df["signal"].shift(1)
+    df["position"] = df["signal"].shift(1).fillna(0)
 
     return df
 
 
 def get_params(short_window=20, long_window=50):
     return {"short_window": short_window, "long_window": long_window}
+

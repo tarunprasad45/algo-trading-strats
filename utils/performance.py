@@ -93,7 +93,8 @@ def _extract_trades(df):
 
         elif row["trade_start"] and in_trade:
             exit_price = row["Close"] if "Close" in df.columns else None
-            pnl = (exit_price - entry_price) / entry_price if (entry_price and exit_price) else np.nan
+            direction = 1 if df.loc[entry_date, "pos"] > 0 else -1
+            pnl = direction * (exit_price - entry_price) / entry_price if (entry_price and exit_price) else np.nan
             hold_days = (date - entry_date).days if entry_date else np.nan
             trades.append({"entry": entry_date, "exit": date,
                            "pnl": pnl, "hold_days": hold_days})
@@ -130,3 +131,6 @@ def print_summary(metrics, strategy_name="Strategy"):
             else:
                 print(f"    {k:<22} {str(v):>8}")
     print(f"\n{line}\n")
+
+
+    
